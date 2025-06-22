@@ -75,6 +75,7 @@ import { smashyStreamScraper } from './sources/smashystream';
 import { soaperTvScraper } from './sources/soapertv';
 import { vidSrcToScraper } from './sources/vidsrcto';
 import { warezcdnScraper } from './sources/warezcdn';
+import { MBPApiScraper } from './sources/mbp_api';
 
 export function gatherAllSources(): Array<Sourcerer> {
   // all sources are gathered here
@@ -111,6 +112,7 @@ export function gatherAllSources(): Array<Sourcerer> {
     vidsrcsuScraper,
     TASFScraper,
     mp4hydraScraper,
+    MBPApiScraper,
   ];
 }
 
