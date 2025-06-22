@@ -52,7 +52,7 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
       },
     );
 
-  const qualities = data.data.list.filter((x) => x.path && (x.format || x.filename.split('.')[-1]) === 'mp4');
+  const qualities = data.data.list.filter((x) => x.path && (x.format || x.filename.split('.').at(-1)) === 'mp4');
 
   if (!qualities.length) throw new NotFoundError('No watchable item found');
 
