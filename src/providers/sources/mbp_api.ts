@@ -62,7 +62,7 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
     flags: [flags.CORS_ALLOWED],
     captions: [],
     type: 'file',
-    qualities: qualities.reverse().reduce<Partial<Record<Qualities, StreamFile>>>(
+    qualities: qualities.reduce<Partial<Record<Qualities, StreamFile>>>(
       (prev, x) => ({
         ...prev,
         [mapQuality(x.real_quality)]: {
