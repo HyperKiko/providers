@@ -8,7 +8,7 @@ import { Qualities, Stream, StreamFile } from '../streams';
 const baseUrl = 'https://mbp.pirxcy.dev/';
 
 function mapQuality(quality: string): Qualities {
-  switch (quality.toLowerCase()) {
+  switch (quality) {
     case '4K':
       return '4k';
     case '1080p':
@@ -42,7 +42,7 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
 
   ctx.progress(60);
 
-  const data: { data: { list: { path: string; real_quality: string }[] } } = await ctx.proxiedFetcher(
+  const data: { data: { list: { path: string; real_quality: string; filename: string }[] } } = await ctx.proxiedFetcher(
     ctx.media.type === 'movie'
       ? `/movie/${mediaID}`
       : `/tv/${mediaID}/${ctx.media.season.number}/${ctx.media.episode.number}`,
@@ -51,7 +51,7 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
     },
   );
 
-  const qualities = data.data.list.filter((x) => x.path);
+  const qualities = data.data.list.filter((x) => x.path && x.filename.endsWith('.mp4'));
 
   if (!qualities.length) throw new NotFoundError('No watchable item found');
 
