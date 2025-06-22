@@ -42,16 +42,17 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
 
   ctx.progress(60);
 
-  const data: { data: { list: { path: string; real_quality: string; filename: string }[] } } = await ctx.proxiedFetcher(
-    ctx.media.type === 'movie'
-      ? `/movie/${mediaID}`
-      : `/tv/${mediaID}/${ctx.media.season.number}/${ctx.media.episode.number}`,
-    {
-      baseUrl,
-    },
-  );
+  const data: { data: { list: { path: string; real_quality: string; filename: string; format: string }[] } } =
+    await ctx.proxiedFetcher(
+      ctx.media.type === 'movie'
+        ? `/movie/${mediaID}`
+        : `/tv/${mediaID}/${ctx.media.season.number}/${ctx.media.episode.number}`,
+      {
+        baseUrl,
+      },
+    );
 
-  const qualities = data.data.list.filter((x) => x.path && x.filename.endsWith('.mp4'));
+  const qualities = data.data.list.filter((x) => x.path && (x.format || x.filename.split('.')[-1]) === 'mp4');
 
   if (!qualities.length) throw new NotFoundError('No watchable item found');
 
