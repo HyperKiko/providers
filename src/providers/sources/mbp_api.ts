@@ -26,7 +26,7 @@ function mapQuality(quality: string): Qualities {
 }
 
 async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promise<SourcererOutput> {
-  const searchResults: { data: { id: number; title: string; year: number }[] } = await ctx.proxiedFetcher('/search', {
+  const searchResults: { data: { id: number; title: string; year: number }[] } = await ctx.fetcher('/search', {
     baseUrl,
     query: {
       q: ctx.media.title,
@@ -42,7 +42,7 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
 
   ctx.progress(60);
 
-  const data: { data: { list: { path: string; real_quality: string }[] } } = await ctx.proxiedFetcher(
+  const data: { data: { list: { path: string; real_quality: string }[] } } = await ctx.fetcher(
     ctx.media.type === 'movie'
       ? `/movie/${mediaID}`
       : `/tv/${mediaID}/${ctx.media.season.number}/${ctx.media.episode.number}`,
