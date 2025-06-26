@@ -1,3 +1,4 @@
+import { flagsAllowedInFeatures, getTargetFeatures, targets } from '@/entrypoint/utils/targets';
 import { alphaScraper, deltaScraper } from '@/providers/embeds/nsbx';
 import { warezcdnembedMp4Scraper } from '@/providers/embeds/warezcdn/mp4';
 import { astraScraper, novaScraper, orionScraper } from '@/providers/embeds/whvx';
@@ -37,11 +38,14 @@ export async function validatePlayableStream(
 ): Promise<Stream | null> {
   if (SKIP_VALIDATION_CHECK_IDS.includes(sourcererId)) return stream;
 
+  const fetcher = flagsAllowedInFeatures(getTargetFeatures(targets.BROWSER, true), stream.flags)
+    ? ops.fetcher
+    : ops.proxiedFetcher;
   if (stream.type === 'hls') {
     // dirty temp fix for base64 urls to prep for fmhy poll
     if (stream.playlist.startsWith('data:')) return stream;
 
-    const result = await ops.proxiedFetcher.full(stream.playlist, {
+    const result = await fetcher.full(stream.playlist, {
       method: 'GET',
       headers: {
         ...stream.preferredHeaders,
@@ -54,7 +58,7 @@ export async function validatePlayableStream(
   if (stream.type === 'file') {
     const validQualitiesResults = await Promise.all(
       Object.values(stream.qualities).map((quality) =>
-        ops.proxiedFetcher.full(quality.url, {
+        fetcher.full(quality.url, {
           method: 'GET',
           headers: {
             ...stream.preferredHeaders,
