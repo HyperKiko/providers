@@ -5,7 +5,7 @@ import { NotFoundError } from '@/utils/errors';
 import { Qualities, StreamFile } from '../streams';
 import { removeDuplicatedLanguages } from '../captions';
 
-const API_SERVER = 'https://mbp.pirxcy.dev/';
+const API_SERVER = 'https://mbpdev.pirxcy.dev/';
 
 type Predicate<T> = (item: T, index: number, items: T[]) => Promise<boolean>;
 
